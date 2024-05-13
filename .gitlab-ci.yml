@@ -1,0 +1,26 @@
+stages:
+  - test
+  - deploy
+
+variables:
+  # Ganti variabel-variabel ini sesuai dengan konfigurasi PostgreSQL Anda
+  POSTGRES_DB: todoapi
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: ekopandu
+
+services:
+  - name: postgres:latest
+  - alias: database
+
+test:
+  stage: test
+  script:
+    - npm install
+    - npm test
+
+deploy:
+  stage: deploy
+  script:
+    - docker build -t todo_api .
+    - docker tag todo-api $CI_REGISTRY_IMAGE/todo-api
+    - docker push $CI_REGISTRY_IMAGE/todo-api
